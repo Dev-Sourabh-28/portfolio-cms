@@ -101,6 +101,9 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Create .env file from example
+        run: cp server/.env.example server/.env
+
       - name: Build Compose Stack
         run: docker compose build
 
