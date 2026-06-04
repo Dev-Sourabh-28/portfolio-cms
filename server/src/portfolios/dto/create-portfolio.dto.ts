@@ -11,7 +11,6 @@ import { Type } from 'class-transformer';
 import { CreateCustomFieldDto } from './create-custom-field.dto';
 
 export class CreatePortfolioDto {
-
   @IsString()
   @IsNotEmpty()
   title: string;
@@ -63,31 +62,42 @@ export class CreatePortfolioDto {
     fontSize?: string;
     fontWeight?: string;
     fontFamily?: string;
-  }
+  };
 
-    @IsOptional()
+  @IsOptional()
   @IsObject()
   bioStyle?: {
     color?: string;
     fontSize?: string;
     fontWeight?: string;
     fontFamily?: string;
-  }
+  };
 
-
-    @IsOptional()
+  @IsOptional()
   @IsObject()
   profileImageStyle?: {
     size?: string;
-    shape?: 'circular' | 'square' | 'rounded' | 'hexagon' | 'pentagon' | 'octagon';
-  }
+    shape?:
+      | 'circular'
+      | 'square'
+      | 'rounded'
+      | 'hexagon'
+      | 'pentagon'
+      | 'octagon';
+  };
 
   @IsOptional()
   @IsObject()
   projectImageStyle?: {
     size?: string;
-    shape?: 'circular' | 'square' | 'rounded' | 'hexagon' | 'pentagon' | 'octagon';
-  }
+    shape?:
+      | 'circular'
+      | 'square'
+      | 'rounded'
+      | 'hexagon'
+      | 'pentagon'
+      | 'octagon';
+  };
 
   @IsOptional()
   @ValidateNested({ each: true })

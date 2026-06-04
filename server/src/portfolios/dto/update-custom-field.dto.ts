@@ -6,7 +6,10 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { CustomFieldType, CustomFieldStyleDto } from './create-custom-field.dto';
+import {
+  CustomFieldType,
+  CustomFieldStyleDto,
+} from './create-custom-field.dto';
 
 export class UpdateCustomFieldDto {
   @IsOptional()

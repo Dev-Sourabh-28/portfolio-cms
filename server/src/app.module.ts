@@ -10,7 +10,14 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { UploadModule } from './upload/upload.module';
 
 @Module({
-  imports: [AuthModule, PrismaModule, PortfoliosModule, ProjectsModule, CloudinaryModule, UploadModule],
+  imports: [
+    AuthModule,
+    PrismaModule,
+    PortfoliosModule,
+    ProjectsModule,
+    CloudinaryModule,
+    UploadModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

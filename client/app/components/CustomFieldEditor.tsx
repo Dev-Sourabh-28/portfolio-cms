@@ -22,7 +22,7 @@ import { CSS } from "@dnd-kit/utilities";
 interface CustomField {
   id: string;
   type: "paragraph" | "orderedList" | "unorderedList" | "heading" | "subheading";
-  content: any;
+  content: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   order: number;
   style?: {
     fontFamily?: string;
@@ -49,9 +49,9 @@ function SortableField({
   onStyleChange,
 }: {
   field: CustomField;
-  onEdit: (content: any) => void;
+  onEdit: (content: any) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
   onDelete: () => void;
-  onStyleChange: (style: any) => void;
+  onStyleChange: (updates: Partial<CustomField>) => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
     id: field.id,
@@ -98,7 +98,7 @@ function SortableField({
           </button>
           <select
             value={field.type}
-            onChange={(e) => onStyleChange({ type: e.target.value as any })}
+            onChange={(e) => onStyleChange({ type: e.target.value as CustomField['type'] })}
             className="bg-white/10 text-[#f5f0e8] text-xs px-2 py-1 rounded border border-white/10 outline-none"
           >
             <option value="paragraph" className="text-black">
@@ -302,7 +302,7 @@ export default function CustomFieldEditor({
     })
   );
 
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (!over) {

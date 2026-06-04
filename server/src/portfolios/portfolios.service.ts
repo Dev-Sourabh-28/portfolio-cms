@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePortfolioDto } from './dto/create-portfolio.dto';
 import { CreateCustomFieldDto } from './dto/create-custom-field.dto';
 import { UpdateCustomFieldDto } from './dto/update-custom-field.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class PortfoliosService {
@@ -14,6 +15,17 @@ export class PortfoliosService {
       data: {
         ...portfolioData,
         userId,
+        customFields: customFields
+          ? {
+              create: customFields.map((field) => ({
+                type: field.type,
+                content: field.content as Prisma.InputJsonValue,
+                order: field.order,
+                style: field.style as Prisma.InputJsonValue,
+                isVisible: field.isVisible ?? true,
+              })),
+            }
+          : undefined,
       },
     });
   }
@@ -60,7 +72,21 @@ export class PortfoliosService {
       where: {
         id,
       },
-      data: portfolioData,
+      data: {
+        ...portfolioData,
+        customFields: customFields
+          ? {
+              deleteMany: {},
+              create: customFields.map((field) => ({
+                type: field.type,
+                content: field.content as Prisma.InputJsonValue,
+                order: field.order,
+                style: field.style as Prisma.InputJsonValue,
+                isVisible: field.isVisible ?? true,
+              })),
+            }
+          : undefined,
+      },
     });
   }
 
@@ -79,27 +105,32 @@ export class PortfoliosService {
     });
 
     if (existingCount >= 10) {
-      throw new BadRequestException('Maximum 10 custom fields allowed per portfolio');
+      throw new BadRequestException(
+        'Maximum 10 custom fields allowed per portfolio',
+      );
     }
 
     return this.prisma.customField.create({
       data: {
         type: dto.type,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         content: dto.content,
         order: dto.order,
-        style: dto.style as any,
-        isVisible: dto.isVisible,
+        style: dto.style as Prisma.InputJsonValue,
+        isVisible: dto.isVisible ?? true,
         portfolioId,
       },
     });
   }
 
   async updateCustomField(fieldId: string, dto: UpdateCustomFieldDto) {
-    const updateData: any = {};
+    const updateData: Prisma.CustomFieldUpdateInput = {};
     if (dto.type !== undefined) updateData.type = dto.type;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     if (dto.content !== undefined) updateData.content = dto.content;
     if (dto.order !== undefined) updateData.order = dto.order;
-    if (dto.style !== undefined) updateData.style = dto.style as any;
+    if (dto.style !== undefined)
+      updateData.style = dto.style as Prisma.InputJsonValue;
     if (dto.isVisible !== undefined) updateData.isVisible = dto.isVisible;
 
     return this.prisma.customField.update({
@@ -114,7 +145,10 @@ export class PortfoliosService {
     });
   }
 
-  async reorderCustomFields(portfolioId: string, fieldOrders: { id: string; order: number }[]) {
+  async reorderCustomFields(
+    portfolioId: string,
+    fieldOrders: { id: string; order: number }[],
+  ) {
     // Update each field's order
     const updates = fieldOrders.map(({ id, order }) =>
       this.prisma.customField.update({
@@ -130,7 +164,11 @@ export class PortfoliosService {
     });
   }
 
-  async toggleFieldVisibility(portfolioId: string, fieldType: string, isVisible: boolean) {
+  async toggleFieldVisibility(
+    portfolioId: string,
+    fieldType: string,
+    isVisible: boolean,
+  ) {
     // For built-in fields, we'll store them as special custom fields with a specific type
     // This is a simplified approach - in production you might want a separate table for built-in field visibility
     const existingField = await this.prisma.customField.findFirst({

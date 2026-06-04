@@ -67,7 +67,7 @@ type ThemeProps = {
         customFields?: Array<{
             id: string;
             type: 'paragraph' | 'orderedList' | 'unorderedList' | 'heading';
-            content: any;
+            content: any; // eslint-disable-line @typescript-eslint/no-explicit-any
             order: number;
             style?: {
                 fontFamily?: string;
@@ -177,7 +177,7 @@ const getFontStyle = (fontStyle?: string) => {
     return fontStyle === 'italic' ? 'italic' : 'normal';
 };
 
-const renderCustomField = (field: any) => {
+const renderCustomField = (field: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
     if (!field.isVisible) return null;
 
     const content = typeof field.content === 'string' ? field.content : '';
@@ -429,9 +429,9 @@ export default function TerminalTheme({ portfolio }: ThemeProps) {
                             <p className="text-sm"><span className="text-[#39ff14]/50">{prompt}</span> cat stats.json</p>
                             <div className="mt-3 pl-4 border-l-2 border-[#39ff14]/20 text-sm">
                                 <p className="text-[#39ff14]/50">{"{"}</p>
-                                <p className="pl-4"><span className="text-[#67e8f9]">"years_experience"</span>: <span className="text-[#fbbf24]">{portfolio.yearsExperience || 0}</span>,</p>
-                                <p className="pl-4"><span className="text-[#67e8f9]">"clients_handled"</span>: <span className="text-[#fbbf24]">{portfolio.clientsHandled || 0}</span>,</p>
-                                <p className="pl-4"><span className="text-[#67e8f9]">"total_projects"</span>: <span className="text-[#fbbf24]">{portfolio.projects?.length || 0}</span></p>
+                                <p className="pl-4"><span className="text-[#67e8f9]">&quot;years_experience&quot;</span>: <span className="text-[#fbbf24]">{portfolio.yearsExperience || 0}</span>,</p>
+                                <p className="pl-4"><span className="text-[#67e8f9]">&quot;clients_handled&quot;</span>: <span className="text-[#fbbf24]">{portfolio.clientsHandled || 0}</span>,</p>
+                                <p className="pl-4"><span className="text-[#67e8f9]">&quot;total_projects&quot;</span>: <span className="text-[#fbbf24]">{portfolio.projects?.length || 0}</span></p>
                                 <p className="text-[#39ff14]/50">{"}"}</p>
                             </div>
                         </div>

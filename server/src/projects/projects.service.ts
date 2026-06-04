@@ -9,8 +9,16 @@ export class ProjectsService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateProjectDto) {
+    const { portfolioId, titleStyle, descriptionStyle, ...projectData } = dto;
     return this.prisma.project.create({
-      data: dto as Prisma.ProjectCreateInput,
+      data: {
+        ...projectData,
+        titleStyle: titleStyle as Prisma.InputJsonValue,
+        descriptionStyle: descriptionStyle as Prisma.InputJsonValue,
+        portfolio: {
+          connect: { id: portfolioId },
+        },
+      },
     });
   }
 
@@ -25,18 +33,39 @@ export class ProjectsService {
   }
 
   async update(id: string, dto: UpdateProjectDto) {
-    const { portfolioId, ...updateData } = dto as Prisma.ProjectUpdateInput;
+    const {
+      portfolioId,
+      title,
+      description,
+      githubUrl,
+      liveUrl,
+      techStack,
+      imageUrl,
+      imageUrls,
+      titleStyle,
+      descriptionStyle,
+    } = dto;
 
-    const data: Prisma.ProjectUpdateInput = {
-      ...updateData,
-      ...(portfolioId ? { portfolio: { connect: { id: portfolioId } } } : {}) as Prisma.ProjectUpdateInput,
-    };
+    const data: Prisma.ProjectUpdateInput = {};
+
+    if (title !== undefined) data.title = title;
+    if (description !== undefined) data.description = description;
+    if (githubUrl !== undefined) data.githubUrl = githubUrl;
+    if (liveUrl !== undefined) data.liveUrl = liveUrl;
+    if (techStack !== undefined) data.techStack = techStack;
+    if (imageUrl !== undefined) data.imageUrl = imageUrl;
+    if (imageUrls !== undefined) data.imageUrls = imageUrls;
+    if (titleStyle !== undefined)
+      data.titleStyle = titleStyle as Prisma.InputJsonValue;
+    if (descriptionStyle !== undefined)
+      data.descriptionStyle = descriptionStyle as Prisma.InputJsonValue;
+    if (portfolioId) data.portfolio = { connect: { id: portfolioId } };
 
     return this.prisma.project.update({
       where: {
         id,
       },
-      data: data as Prisma.ProjectUpdateInput,
+      data: data,
     });
   }
 

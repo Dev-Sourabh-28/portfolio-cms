@@ -61,10 +61,7 @@ export class PortfoliosController {
 
   @UseGuards(JwtAuthGuard)
   @Post(':id/custom-fields')
-  addCustomField(
-    @Param('id') id: string,
-    @Body() dto: CreateCustomFieldDto,
-  ) {
+  addCustomField(@Param('id') id: string, @Body() dto: CreateCustomFieldDto) {
     return this.portfoliosService.addCustomField(id, dto);
   }
 
@@ -98,6 +95,10 @@ export class PortfoliosController {
     @Param('id') id: string,
     @Body() body: { fieldType: string; isVisible: boolean },
   ) {
-    return this.portfoliosService.toggleFieldVisibility(id, body.fieldType, body.isVisible);
+    return this.portfoliosService.toggleFieldVisibility(
+      id,
+      body.fieldType,
+      body.isVisible,
+    );
   }
 }

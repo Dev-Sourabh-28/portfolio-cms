@@ -20,7 +20,9 @@ export default function MultiImageUpload({
   const [images, setImages] = useState<string[]>(currentImages);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setImages(currentImages);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentImages]);
 
   const uploadFiles = async (files: FileList | null) => {

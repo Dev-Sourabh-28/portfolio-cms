@@ -14,21 +14,32 @@ export class CloudinaryService {
 
   async uploadImage(file: Buffer, folder: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream(
-        {
-          folder,
-          resource_type: 'image',
-        },
-        (error, result) => {
-          if (error) {
-            reject(error);
-          } else if (result) {
-            resolve(result.secure_url);
-          } else {
-            reject(new Error('Upload failed'));
-          }
-        },
-      ).end(file);
+      cloudinary.uploader
+        .upload_stream(
+          {
+            folder,
+            resource_type: 'image',
+          },
+          (error, result) => {
+            if (error) {
+              // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+              reject(
+                error instanceof Error
+                  ? error
+                  : new Error(
+                      error instanceof Object
+                        ? JSON.stringify(error)
+                        : String(error),
+                    ),
+              );
+            } else if (result) {
+              resolve(result.secure_url);
+            } else {
+              reject(new Error('Upload failed'));
+            }
+          },
+        )
+        .end(file);
     });
   }
 

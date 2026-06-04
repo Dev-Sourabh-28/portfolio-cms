@@ -66,7 +66,7 @@ type ThemeProps = {
     customFields?: Array<{
       id: string;
       type: 'paragraph' | 'orderedList' | 'unorderedList' | 'heading';
-      content: any;
+      content: any; // eslint-disable-line @typescript-eslint/no-explicit-any
       order: number;
       style?: {
         fontFamily?: string;
@@ -176,7 +176,7 @@ const getFontStyle = (fontStyle?: string) => {
   return fontStyle === 'italic' ? 'italic' : 'normal';
 };
 
-const renderCustomField = (field: any) => {
+const renderCustomField = (field: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
   if (!field.isVisible) return null;
 
   const content = typeof field.content === 'string' ? field.content : '';

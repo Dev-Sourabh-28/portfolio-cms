@@ -24,7 +24,7 @@ interface Project {
 interface CustomField {
     id: string;
     type: "paragraph" | "orderedList" | "unorderedList" | "heading";
-    content: any;
+    content: any; // eslint-disable-line @typescript-eslint/no-explicit-any
     order: number;
     style?: {
         fontFamily?: string;
@@ -517,7 +517,7 @@ export default function PortfolioEditor() {
                                     value={portfolio.profileImageStyle?.shape || 'rounded'}
                                     onChange={(e) => setPortfolio({
                                         ...portfolio,
-                                        profileImageStyle: { ...portfolio.profileImageStyle, shape: e.target.value as any }
+                                        profileImageStyle: { ...portfolio.profileImageStyle, shape: e.target.value as 'circular' | 'square' | 'rounded' | 'hexagon' | 'pentagon' | 'octagon' }
                                     })}
                                     className="w-full h-9 px-3 border border-white/10 rounded bg-white/5 text-xs text-[#f5f0e8] outline-none"
                                 >
@@ -775,7 +775,7 @@ export default function PortfolioEditor() {
                                     value={portfolio.projectImageStyle?.shape || 'rounded'}
                                     onChange={(e) => setPortfolio({
                                         ...portfolio,
-                                        projectImageStyle: { ...portfolio.projectImageStyle, shape: e.target.value as any }
+                                        projectImageStyle: { ...portfolio.projectImageStyle, shape: e.target.value as 'circular' | 'square' | 'rounded' | 'hexagon' | 'pentagon' | 'octagon' }
                                     })}
                                     className="w-full h-9 px-3 border border-white/10 rounded bg-white/5 text-xs text-[#f5f0e8] outline-none"
                                 >

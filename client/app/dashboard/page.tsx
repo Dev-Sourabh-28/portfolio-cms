@@ -47,7 +47,9 @@ export default function DashboardPage() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void fetchPortfolios();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const createPortfolio = async () => {

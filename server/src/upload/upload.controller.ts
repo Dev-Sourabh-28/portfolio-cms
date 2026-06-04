@@ -23,9 +23,12 @@ export class UploadController {
     }
 
     try {
-      const url = await this.cloudinaryService.uploadImage(file.buffer, 'lead-tracker');
+      const url = await this.cloudinaryService.uploadImage(
+        file.buffer,
+        'lead-tracker',
+      );
       return { url };
-    } catch (error) {
+    } catch {
       throw new BadRequestException('Failed to upload image');
     }
   }
