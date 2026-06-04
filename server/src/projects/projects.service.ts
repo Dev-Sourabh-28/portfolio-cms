@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ProjectsService {
@@ -9,7 +10,7 @@ export class ProjectsService {
 
   async create(dto: CreateProjectDto) {
     return this.prisma.project.create({
-      data: dto as any,
+      data: dto as Prisma.ProjectCreateInput,
     });
   }
 
@@ -24,18 +25,18 @@ export class ProjectsService {
   }
 
   async update(id: string, dto: UpdateProjectDto) {
-    const { portfolioId, ...updateData } = dto as any;
+    const { portfolioId, ...updateData } = dto as Prisma.ProjectUpdateInput;
 
-    const data = {
+    const data: Prisma.ProjectUpdateInput = {
       ...updateData,
-      ...(portfolioId ? { portfolio: { connect: { id: portfolioId } } } : {}),
+      ...(portfolioId ? { portfolio: { connect: { id: portfolioId } } } : {}) as Prisma.ProjectUpdateInput,
     };
 
     return this.prisma.project.update({
       where: {
         id,
       },
-      data,
+      data: data as Prisma.ProjectUpdateInput,
     });
   }
 
