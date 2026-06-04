@@ -7,10 +7,12 @@ import {
   UseGuards,
   Delete,
   Param,
+  Patch,
 } from '@nestjs/common';
 import type { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guards';
 import { CreateProjectDto } from './dto/create-project.dto';
+import { UpdateProjectDto } from './dto/update-project.dto';
 import { ProjectsService } from './projects.service';
 
 @Controller('projects')
@@ -27,6 +29,12 @@ export class ProjectsController {
   @Get()
   findAll(@Req() req: Request & { user: { userId: string } }) {
     return this.projectsService.findAll(req.user.userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() dto: UpdateProjectDto) {
+    return this.projectsService.update(id, dto);
   }
 
   @UseGuards(JwtAuthGuard)

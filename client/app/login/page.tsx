@@ -22,7 +22,6 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       const response = await API.post("/auth/login", formData);
-      localStorage.setItem("token", response.data.access_token);
       alert("Login Successful");
       router.push("/dashboard");
     } catch (error) {
