@@ -18,34 +18,70 @@ model User {
 }
 
 model Portfolio {
-  id           String   @id @default(cuid())
-  title        String
-  slug         String   @unique
-  bio          String?
-  theme        String   @default("minimal")
+  id              String    @id @default(cuid())
+  title           String
+  slug            String    @unique
+  subtitle        String?
+  bio             String?
 
-  userId       String
-  user         User     @relation(fields: [userId], references: [id])
+  yearsExperience Int?
+  clientsHandled  Int?
 
-  projects     Project[]
+  techStack       String[]
 
-  createdAt    DateTime @default(now())
+  theme           String    @default("minimal")
+
+  profilePhotoUrl String?
+  resumeImageUrl  String?
+  resumeUrl       String?
+  bestProjectUrl  String?
+
+  titleStyle      Json?
+  subtitleStyle   Json?
+  bioStyle        Json?
+
+  projectImageStyle Json?
+  profileImageStyle Json?
+
+  userId          String
+  user            User      @relation(fields: [userId], references: [id])
+
+  projects        Project[]
+  customFields    CustomField[]
+
+  createdAt       DateTime  @default(now())
 }
 
 model Project {
-  id           String   @id @default(cuid())
-  title        String
-  description  String
-  githubUrl    String?
-  liveUrl      String?
+  id               String   @id @default(cuid())
+  title            String
+  description      String
+  githubUrl        String?
+  liveUrl          String?
 
-  techStack    String[]
+  techStack        String[]
+  imageUrl         String?
+  imageUrls        String[]      @default([])
 
-  imageUrl     String?
+  titleStyle       Json?
+  descriptionStyle Json?
 
-  portfolioId  String
-  portfolio    Portfolio @relation(fields: [portfolioId], references: [id])
+  portfolioId      String
+  portfolio        Portfolio @relation(fields: [portfolioId], references: [id])
 
-  createdAt    DateTime  @default(now())
+  createdAt        DateTime  @default(now())
 }
 
+model CustomField {
+  id          String   @id @default(cuid())
+  type        String   // paragraph, orderedList, unorderedList, heading
+  content     Json     // Rich text content
+  order       Int      // Position in the portfolio
+  style       Json?    // Styling options (fontFamily, fontSize, fontWeight, fontStyle, color)
+  isVisible   Boolean  @default(true) // For built-in fields visibility
+
+  portfolioId String
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+}

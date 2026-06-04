@@ -25,12 +25,14 @@ class ProjectStyleDto {
   color?: string;
 }
 
-export class CreateProjectDto {
+export class UpdateProjectDto {
+  @IsOptional()
   @IsString()
-  title: string;
+  title?: string;
 
+  @IsOptional()
   @IsString()
-  description: string;
+  description?: string;
 
   @IsOptional()
   @IsString()
@@ -64,6 +66,7 @@ export class CreateProjectDto {
   @Type(() => ProjectStyleDto)
   descriptionStyle?: ProjectStyleDto;
 
+  @IsOptional()
   @IsString()
-  portfolioId: string;
+  portfolioId?: string;
 }

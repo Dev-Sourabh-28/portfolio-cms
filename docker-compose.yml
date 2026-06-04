@@ -1,7 +1,7 @@
-version: '3.8'
-
 services:
+
   backend:
+    image: devsourabh123/lead-tracker-backend:latest
     build:
       context: ./server
       dockerfile: Dockerfile
@@ -11,6 +11,7 @@ services:
       - ./server/.env
 
   frontend:
+    image: devsourabh123/lead-tracker-frontend:latest
     build:
       context: ./client
       dockerfile: Dockerfile
