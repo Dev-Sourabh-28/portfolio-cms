@@ -23,7 +23,7 @@ interface Project {
 
 interface CustomField {
     id: string;
-    type: "paragraph" | "orderedList" | "unorderedList" | "heading";
+    type: "paragraph" | "orderedList" | "unorderedList" | "heading" | "subheading";
     content: any; // eslint-disable-line @typescript-eslint/no-explicit-any
     order: number;
     style?: {
