@@ -15,7 +15,7 @@ RUN cd server && npm install --no-audit --no-fund
 
 # Install client deps
 COPY client/package*.json ./client/
-RUN npm install --legacy-peer-deps --no-audit --no-fund
+RUN cd client && npm install --legacy-peer-deps --no-audit --no-fund
 
 # Copy the rest of the repo
 COPY . .
