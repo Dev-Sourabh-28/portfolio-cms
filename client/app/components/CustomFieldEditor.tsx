@@ -98,7 +98,10 @@ function SortableField({
           </button>
           <select
             value={field.type}
-            onChange={(e) => onStyleChange({ type: e.target.value as CustomField['type'] })}
+            onChange={(e) => {
+              console.log('Type change:', e.target.value, 'Current type:', field.type);
+              onStyleChange({ type: e.target.value as CustomField['type'] });
+            }}
             className="bg-white/10 text-[#f5f0e8] text-xs px-2 py-1 rounded border border-white/10 outline-none"
           >
             <option value="paragraph" className="text-black">
@@ -155,24 +158,24 @@ function SortableField({
           {field.content ? (
             <div>
               {field.type === "paragraph" && (
-                <p>{field.content}</p>
+                <p>{String(field.content)}</p>
               )}
               {field.type === "heading" && (
-                <h2 className="text-2xl font-bold">{field.content}</h2>
+                <h2 className="text-2xl font-bold">{String(field.content)}</h2>
               )}
               {field.type === "subheading" && (
-                <h3 className="text-xl font-semibold">{field.content}</h3>
+                <h3 className="text-xl font-semibold">{String(field.content)}</h3>
               )}
               {field.type === "orderedList" && (
                 <ol className="list-decimal list-inside space-y-1">
-                  {field.content.split("\n").map((item: string, idx: number) => (
+                  {String(field.content).split("\n").map((item: string, idx: number) => (
                     item.trim() && <li key={idx}>{item.trim()}</li>
                   ))}
                 </ol>
               )}
               {field.type === "unorderedList" && (
                 <ul className="list-disc list-inside space-y-1">
-                  {field.content.split("\n").map((item: string, idx: number) => (
+                  {String(field.content).split("\n").map((item: string, idx: number) => (
                     item.trim() && <li key={idx}>{item.trim()}</li>
                   ))}
                 </ul>
@@ -370,12 +373,15 @@ export default function CustomFieldEditor({
               field={field}
               onEdit={(content) => onUpdateField(field.id, { content })}
               onDelete={() => onDeleteField(field.id)}
-              onStyleChange={(updates) =>
-                onUpdateField(field.id, {
+              onStyleChange={(updates) => {
+                console.log('onStyleChange called with updates:', updates);
+                const updatePayload = {
                   ...updates,
-                  style: { ...field.style, ...updates.style },
-                })
-              }
+                  style: updates.style ? { ...field.style, ...updates.style } : field.style,
+                };
+                console.log('Sending to onUpdateField:', updatePayload);
+                onUpdateField(field.id, updatePayload);
+              }}
             />
           ))}
         </SortableContext>
