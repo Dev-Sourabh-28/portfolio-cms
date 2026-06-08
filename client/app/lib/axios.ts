@@ -3,7 +3,7 @@ import axios from "axios";
 const baseURL =
   process.env.NEXT_PUBLIC_API_URL ||
   (typeof window === "undefined"
-    ? "http://localhost:5000"
+    ? "https://portfolio-cms-1-dsxl.onrender.com"
     : `${window.location.protocol}//${window.location.hostname}:5000`);
 
 const API = axios.create({ baseURL });
