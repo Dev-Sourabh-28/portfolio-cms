@@ -45,12 +45,23 @@ export class AuthController {
   ) {
     const result: AuthLoginResult = await this.authService.login(body);
 
-    res.cookie('token', result.access_token, {
+    const isProd = process.env.NODE_ENV === 'production';
+
+    const cookieOptions: Record<string, any> = {
       httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    };
+
+    if (isProd) {
+      cookieOptions.secure = true;
+      cookieOptions.sameSite = 'none';
+      if (process.env.COOKIE_DOMAIN) cookieOptions.domain = process.env.COOKIE_DOMAIN;
+    } else {
+      cookieOptions.secure = false;
+      cookieOptions.sameSite = 'lax';
+    }
+
+    res.cookie('token', result.access_token, cookieOptions);
 
     return {
       message: 'Login successful',
@@ -63,5 +74,23 @@ export class AuthController {
   @Get('profile')
   getProfile(@Req() req: AuthRequest) {
     return req.user;
+  }
+
+  @Post('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    const isProd = process.env.NODE_ENV === 'production';
+
+    const cookieOptions: Record<string, any> = {};
+    if (isProd) {
+      cookieOptions.secure = true;
+      cookieOptions.sameSite = 'none';
+      if (process.env.COOKIE_DOMAIN) cookieOptions.domain = process.env.COOKIE_DOMAIN;
+    } else {
+      cookieOptions.secure = false;
+      cookieOptions.sameSite = 'lax';
+    }
+
+    res.clearCookie('token', cookieOptions);
+    return { message: 'Logged out' };
   }
 }
