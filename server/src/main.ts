@@ -13,6 +13,7 @@ async function bootstrap(): Promise<void> {
     'http://localhost:3000',
     'http://localhost:3001',
     'http://localhost:5000',
+    'https://portfolio-cms-1-dsxl.onrender.com',
     process.env.FRONTEND_URL,
   ],
   credentials: true,
